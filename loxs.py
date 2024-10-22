@@ -1956,10 +1956,20 @@ try:
                 console.print(f"[red][!] Error downloading update: {e}[/red]")
                 return False
 
+        def normalize_version(v):
+            # Remove 'v' prefix if present
+            # v = v.lstrip('v')
+
+            # Three components (major.minor.patch)
+            parts = v.split('.')
+            while len(parts) < 3:
+                parts.append('0')
+            return '.'.join(parts)
+
         display_update_intro()
 
-        repo_owner = "coffinxp"
-        repo_name = "loxs"
+        repo_owner = "1hehaq"
+        repo_name = "test"
         current_version = get_current_version()
 
         if current_version is None:
@@ -1977,7 +1987,10 @@ try:
             input("\nPress Enter to return to the main menu...")
             return
 
-        if version.parse(latest_version) > version.parse(current_version):
+        current_v = version.parse(normalize_version(current_version))
+        latest_v = version.parse(normalize_version(latest_version))
+
+        if latest_v > current_v:
             console.print(f"[green][✓] New version available: {latest_version}[/green]")
             update_choice = console.input("[cyan][?] Do you want to update? (y/n): [/cyan]").lower().strip()
             
